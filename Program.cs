@@ -366,7 +366,9 @@ namespace GitDepsPacker
 								DepBlob.PackOffset = PackStream.Position;
 								using (FileStream BlobFile = File.Open(BlobToFile[DepBlob.Hash], FileMode.Open, FileAccess.Read, FileShare.Read))
 								{
-									BlobFile.CopyTo(PackStream);
+                                    Log.WriteLine("Copying file: {0}", BlobToFile[DepBlob.Hash]);
+
+                                    BlobFile.CopyTo(PackStream);
 								}
 								if ((Stream.Position > Params.Optimal) || (!BlobsQueue.TryDequeue(out DepBlob)))
 								{
@@ -382,6 +384,7 @@ namespace GitDepsPacker
 					string PackFile = Path.Combine(Params.Storage, DepPack.Hash);
 					if (!File.Exists(PackFile))
 					{
+                        Log.WriteLine("Moving File: {0}", PackFile);
 						File.Move(TempPath, PackFile);
 					}
 					foreach (DependencyBlob Blob in PackedBlobs)
@@ -408,6 +411,7 @@ namespace GitDepsPacker
 
 		private static void UpdateReusedPacks(string ManifestFile, IDictionary<string, DependencyBlob> DepBlobs, IDictionary<string, DependencyPack> DepPacks)
 		{
+            Log.WriteLine("UpdateReusedPacks: {0}", ManifestFile);
 			DependencyManifest Manifest;
 			ReadXmlObject(ManifestFile, out Manifest);
 			ISet<string> Packs = new HashSet<string>();

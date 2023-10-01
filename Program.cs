@@ -508,7 +508,7 @@ namespace GitDepsPacker
 					if (line == null) break;
 					if ((line.StartsWith("!") || line.StartsWith("?")) && line.Length > 3)
 					{
-						string path = line.Substring(3);
+						string path = line.Substring(3).Trim('"');
 						if (FoundFiles.Contains(path))
 						{
 							TargetFiles.Add(path);
